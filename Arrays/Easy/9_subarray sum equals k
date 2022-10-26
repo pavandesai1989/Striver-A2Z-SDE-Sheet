@@ -1,0 +1,68 @@
+//https://leetcode.com/problems/subarray-sum-equals-k/
+
+******* BRUTE FORCE******
+time : o(n*n)
+
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) 
+    {
+        int n = nums.size();
+        int ans = 0;
+        
+        for(int i=0;i<n;i++)
+        {
+            int sum = nums[i];
+            
+            if(sum == k)
+                ans++;
+            
+            for(int j=i+1;j<n;j++)
+            {
+                sum += nums[j];
+                
+                if(sum == k)
+                    ans++;
+                    
+            }
+        }
+        
+        return ans;
+    }
+};
+
+********** PREFIX SUM********
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) 
+    {
+        //we will use concept of prefix sum here 
+        int n = nums.size();
+        //take map to store the prefix sum
+        unordered_map<int,int> m;
+        int count = 0;
+        int sum = 0;
+        
+        for(int i=0;i<n;i++)
+        {
+            sum += nums[i];
+            
+            //if sum is equal to k update count
+            if(sum == k)
+                count++;
+            
+            //check if sum-k is in map
+            if(m.find(sum-k) != m.end())
+                count = count + m[sum-k];
+            
+            //add sum to the map. if sum exists increment its count else add count
+            if(m.find(sum) != m.end())
+                m[sum]++;
+            else
+                m[sum] = 1;
+            
+        }
+        return count;
+        
+    }
+};
